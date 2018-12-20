@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageId>ReferralCandyAPI_Anafore</PackageId>
+    <PackageVersion>0.1</PackageVersion>
+    <Authors>ReferralCandy</Authors>
+    <Description>A library that helps makes C# integration with ReferralCandy's API easier.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Interfaces\Verification\Verification.cs" />
+    <Compile Remove="Response\EmptyStruct.cs" />
+    <Compile Remove="Request\Verify.cs" />
+    <Compile Remove="Request\Base.cs" />
+    <Compile Remove="Interfaces\Verification\IVerification.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Request\" />
+    <Folder Include="Response\" />
+    <Folder Include="Classes\" />
+    <Folder Include="Interfaces\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+    <PackageReference Include="NuGet.Build.Packaging" Version="0.2.0" />
+  </ItemGroup>
+</Project>
