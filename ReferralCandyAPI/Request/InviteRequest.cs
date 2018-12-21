@@ -1,26 +1,14 @@
-﻿using System.Collections.Generic;
-using ReferralCandyAPI.Interfaces;
-
-namespace ReferralCandyAPI.Request
+﻿namespace ReferralCandyAPI.Request
 {
-    public class InviteRequest : IRequest
+    public class InviteRequest : BaseRequest
     {
-        public Dictionary<string, string> parameters { get; private set; }
-
         /// <summary>
         /// This method lets you send out an in-app invite to a contact
         /// </summary>
         /// <param name="email">Contact's email address</param>
-        public InviteRequest(string email)
+        public InviteRequest(string email) : base("invite")
         {
-            SortedDictionary<string, string> raw_parameters = new SortedDictionary<string, string>
-            {
-                { "email", email },
-                { "timestamp", ReferralCandy.CurrentTimestamp() },
-                { "accessID", ReferralCandy.apiAccessId }
-            };
-
-            parameters = ReferralCandy.AppendSignature(raw_parameters);
+            Parameters.Add("email", email);
         }
     }
 }

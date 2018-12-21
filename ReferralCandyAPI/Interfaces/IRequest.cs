@@ -1,9 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Net.Http;
 
 namespace ReferralCandyAPI.Interfaces
 {
     public interface IRequest
     {
-        Dictionary<string, string> parameters { get; }
+        string _endpoint { get; }
+        string Endpoint { get; }
+        SortedDictionary<string, string> Parameters { get; }
+
+        FormUrlEncodedContent PostParameters();
+        string GetRequest();
     }
 }

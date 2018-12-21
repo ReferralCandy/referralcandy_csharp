@@ -1,12 +1,7 @@
-﻿using System.Collections.Generic;
-using ReferralCandyAPI.Interfaces;
-
-namespace ReferralCandyAPI.Request
+﻿namespace ReferralCandyAPI.Request
 {
-    public class PurchaseRequest : IRequest
+    public class PurchaseRequest : BaseRequest
     {
-        public Dictionary<string, string>  parameters { get; private set; }
-
         /// <summary>
         /// This method lets you register a new purchase at your store. A referral email will be sent to the customer.
         /// </summary>
@@ -23,26 +18,19 @@ namespace ReferralCandyAPI.Request
                                 string browser_ip,
                                 string user_agent,
                                 string invoice_amount,
-                                string currency_code)
+                                string currency_code) : base("purchase")
         {
-            SortedDictionary<string, string> raw_parameters = new SortedDictionary<string, string>
-            {
-                { "first_name", first_name },
-                { "email", email },
-                { "order_timestamp", order_timestamp.ToString() },
-                { "browser_ip", browser_ip },
-                { "user_agent", user_agent },
-                { "invoice_amount", invoice_amount },
-                { "currency_code", currency_code },
-                { "timestamp", ReferralCandy.CurrentTimestamp() },
-                { "accessID", ReferralCandy.apiAccessId },
-                { "last_name", "" },
-                { "discount_code", ""},
-                { "accepts_marketing", "true" },
-                { "external_reference_id", "" }
-            };
-
-            parameters = ReferralCandy.AppendSignature(raw_parameters);
+            Parameters.Add("first_name", first_name);
+            Parameters.Add("email", email);
+            Parameters.Add("order_timestamp", order_timestamp.ToString());
+            Parameters.Add("browser_ip", browser_ip);
+            Parameters.Add("user_agent", user_agent);
+            Parameters.Add("invoice_amount", invoice_amount);
+            Parameters.Add("currency_code", currency_code);
+            Parameters.Add("last_name", "");
+            Parameters.Add("discount_code", "");
+            Parameters.Add("accepts_marketing", "true");
+            Parameters.Add("external_reference_id", "");
         }
 
         /// <summary>
@@ -74,26 +62,19 @@ namespace ReferralCandyAPI.Request
                                 string locale = "en",
                                 string discount_code = "",
                                 bool accepts_marketing = true,
-                                string external_reference_id = "")
+                                string external_reference_id = "") : base("purchase")
         {
-            SortedDictionary<string, string> raw_parameters = new SortedDictionary<string, string>
-            {
-                { "first_name", first_name },
-                { "email", email },
-                { "order_timestamp", order_timestamp.ToString() },
-                { "browser_ip", browser_ip },
-                { "user_agent", user_agent },
-                { "invoice_amount", invoice_amount },
-                { "currency_code", currency_code },
-                { "timestamp", ReferralCandy.CurrentTimestamp() },
-                { "accessID", ReferralCandy.apiAccessId },
-                { "last_name", last_name },
-                { "discount_code", discount_code },
-                { "accepts_marketing", accepts_marketing.ToString().ToLower() },
-                { "external_reference_id", external_reference_id }
-            };
-
-            parameters = ReferralCandy.AppendSignature(raw_parameters);
+            Parameters.Add("first_name", first_name);
+            Parameters.Add("email", email);
+            Parameters.Add("order_timestamp", order_timestamp.ToString());
+            Parameters.Add("browser_ip", browser_ip);
+            Parameters.Add("user_agent", user_agent);
+            Parameters.Add("invoice_amount", invoice_amount);
+            Parameters.Add("currency_code", currency_code);
+            Parameters.Add("last_name", last_name);
+            Parameters.Add("discount_code", discount_code);
+            Parameters.Add("accepts_marketing", accepts_marketing.ToString().ToLower());
+            Parameters.Add("external_reference_id", external_reference_id);
         }
     }
 }

@@ -1,29 +1,18 @@
-﻿using System.Collections.Generic;
-using ReferralCandyAPI.Classes;
-using ReferralCandyAPI.Interfaces;
+﻿using ReferralCandyAPI.Classes;
 
 namespace ReferralCandyAPI.Request
 {
-    public class UpdateRewardRequest : IRequest
+    public class UpdateRewardRequest : BaseRequest
     {
-        public Dictionary<string, string> parameters { get; private set; }
-
-        /// <summary>
+       /// <summary>
         /// This method lets you update a custom reward
         /// </summary>
         /// <param name="id">The ID of the reward</param>
         /// <param name="status">The new status of the reward</param>
-        public UpdateRewardRequest(int id, Reward.Status status)
+        public UpdateRewardRequest(int id, Reward.Status status) : base("rewards")
         {
-            SortedDictionary<string, string> raw_parameters = new SortedDictionary<string, string>
-            {
-                { "id", id.ToString() },
-                { "status", status.ToString() },
-                { "timestamp", ReferralCandy.CurrentTimestamp() },
-                { "accessID", ReferralCandy.apiAccessId }
-            };
-
-            parameters = ReferralCandy.AppendSignature(raw_parameters);
+            Parameters.Add("id", id.ToString());
+            Parameters.Add("status", status.ToString());
         }
     }
 }

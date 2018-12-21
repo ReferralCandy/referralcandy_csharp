@@ -1,20 +1,9 @@
-﻿using System.Collections.Generic;
-using ReferralCandyAPI.Interfaces;
-
-namespace ReferralCandyAPI.Request
+﻿namespace ReferralCandyAPI.Request
 {
-    public class VerifyRequest : IRequest
+    public class VerifyRequest : BaseRequest
     {
-        public Dictionary<string, string> parameters { get; private set; }
-
-        public VerifyRequest()
+        public VerifyRequest() : base("verify")
         {
-            SortedDictionary<string, string> raw_parameters = new SortedDictionary<string, string> {
-                { "timestamp", ReferralCandy.CurrentTimestamp() },
-                { "accessID", ReferralCandy.apiAccessId }
-            };
-
-            parameters = ReferralCandy.AppendSignature(raw_parameters);
         }
     }
 }

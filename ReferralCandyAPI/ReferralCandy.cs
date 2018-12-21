@@ -13,7 +13,7 @@ namespace ReferralCandyAPI
     {
         public static string apiAccessId { get; private set; }
         public static string apiSecretKey { get; private set; }
-        private string baseUrl = "https://my.referralcandy.com/api/v1";
+        public static readonly string baseUrl = "https://my.referralcandy.com/api/v1";
         private static readonly HttpClient httpClient = new HttpClient();
 
         /// <summary>
@@ -27,6 +27,7 @@ namespace ReferralCandyAPI
             ReferralCandy.apiSecretKey  = apiSecretKey;
         }
 
+
         public static string CurrentTimestamp()
         {
             return DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString();
@@ -37,58 +38,14 @@ namespace ReferralCandyAPI
             return Convert.ToInt32(date.Subtract(new DateTime(1970, 1, 1)).TotalSeconds).ToString();
         }
 
-        private string ApiEndpoint(string apiMethod)
+        private async Task<HttpResponseMessage> PostRequest(Interfaces.IRequest request)
         {
-            return String.Format("{0}/{1}.json", baseUrl, apiMethod);
+            return await httpClient.PostAsync(request.Endpoint, request.PostParameters());
         }
 
-        public static Dictionary<string, string> AppendSignature(SortedDictionary<string, string> parameters)
+        private async Task<HttpResponseMessage> GetRequest(Interfaces.IRequest request)
         {
-            string preparedParameterString = apiSecretKey;
-            foreach (var parameter in parameters)
-            {
-                preparedParameterString += String.Format("{0}={1}", parameter.Key, parameter.Value);
-            }
-
-            string signature = "";
-            using (MD5 md5Hash = MD5.Create())
-            {
-                byte[] hashData = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(preparedParameterString));
-
-                StringBuilder sb = new StringBuilder();
-                for (int i = 0; i < hashData.Length; i++)
-                {
-                    sb.Append(hashData[i].ToString("x2"));
-                }
-
-                signature = sb.ToString();
-            }
-
-            Dictionary<string, string> preparedParameters = new Dictionary<string, string>(parameters);
-            preparedParameters.Add("signature", signature);
-
-            return preparedParameters;
-        }
-
-        private FormUrlEncodedContent UrlEncode(Dictionary<string, string> preparedParameters)
-        {
-            return new FormUrlEncodedContent(preparedParameters);
-        }
-
-        private async Task<HttpResponseMessage> PostRequest(string endpoint, Interfaces.IRequest request)
-        {
-            return await httpClient.PostAsync(endpoint, UrlEncode(request.parameters));
-        }
-
-        private async Task<HttpResponseMessage> GetRequest(string endpoint, Interfaces.IRequest request)
-        {
-            List<string> parameters = new List<string>();
-            foreach (KeyValuePair<string, string> parameter in request.parameters)
-            {
-                parameters.Add(String.Format("{0}={1}", parameter.Key, parameter.Value));
-            }
-
-            return await httpClient.GetAsync(String.Format("{0}?{1}", endpoint, String.Join("&", parameters)));
+            return await httpClient.GetAsync(request.GetRequest());
         }
 
         /// <summary>
@@ -96,7 +53,7 @@ namespace ReferralCandyAPI
         /// </summary>
         public VerifyResponse Verify(VerifyRequest verifyRequest)
         {
-            return new VerifyResponse(PostRequest(ApiEndpoint("verify"), verifyRequest).Result);
+            return new VerifyResponse(PostRequest(verifyRequest).Result);
         }
 
         /// <summary>
@@ -104,7 +61,7 @@ namespace ReferralCandyAPI
         /// </summary>
         public PurchaseResponse Purchase(PurchaseRequest purchaseRequest)
         {
-            return new PurchaseResponse(PostRequest(ApiEndpoint("purchase"), purchaseRequest).Result);
+            return new PurchaseResponse(PostRequest(purchaseRequest).Result);
         }
 
         /// <summary>
@@ -112,7 +69,7 @@ namespace ReferralCandyAPI
         /// </summary>
         public GetReferralsResponse GetReferrals(GetReferralsRequest getReferralsRequest)
         {
-            return new GetReferralsResponse(PostRequest(ApiEndpoint("referrals"), getReferralsRequest).Result);
+            return new GetReferralsResponse(PostRequest(getReferralsRequest).Result);
         }
 
         /// <summary>
@@ -121,7 +78,7 @@ namespace ReferralCandyAPI
         /// </summary>
         public UpdateReferralResponse UpdateReferral(UpdateReferralRequest updateReferralRequest)
         {
-            return new UpdateReferralResponse(PostRequest(ApiEndpoint("referral"), updateReferralRequest).Result);
+            return new UpdateReferralResponse(PostRequest(updateReferralRequest).Result);
         }
 
         /// <summary>
@@ -129,7 +86,7 @@ namespace ReferralCandyAPI
         /// </summary>
         public GetReferrerResponse GetReferrer(GetReferrerRequest referrerRequest)
         {
-            return new GetReferrerResponse(PostRequest(ApiEndpoint("referrer"), referrerRequest).Result);
+            return new GetReferrerResponse(PostRequest(referrerRequest).Result);
         }
 
         /// <summary>
@@ -137,7 +94,7 @@ namespace ReferralCandyAPI
         /// </summary>
         public GetContactsResponse GetContacts(GetContactsRequest getContactsRequest)
         {
-            return new GetContactsResponse(PostRequest(ApiEndpoint("contacts"), getContactsRequest).Result);
+            return new GetContactsResponse(PostRequest(getContactsRequest).Result);
         }
 
         /// <summary>
@@ -146,7 +103,7 @@ namespace ReferralCandyAPI
         /// </summary>
         public SignupResponse Signup(SignupRequest signupRequest)
         {
-            return new SignupResponse(PostRequest(ApiEndpoint("signup"), signupRequest).Result);
+            return new SignupResponse(PostRequest(signupRequest).Result);
         }
 
         /// <summary>
@@ -154,7 +111,7 @@ namespace ReferralCandyAPI
         /// </summary>
         public InviteResponse Invite(InviteRequest inviteRequest)
         {
-            return new InviteResponse(PostRequest(ApiEndpoint("invite"), inviteRequest).Result);
+            return new InviteResponse(PostRequest(inviteRequest).Result);
         }
 
         /// <summary>
@@ -162,15 +119,15 @@ namespace ReferralCandyAPI
         /// </summary>
         public UpdateUnsubscribedResponse UpdateUnsubscribed(UpdateUnsubscribedRequest updateUnsubscribedRequest)
         {
-            return new UpdateUnsubscribedResponse(PostRequest(ApiEndpoint("unsubscribed"), updateUnsubscribedRequest).Result);
+            return new UpdateUnsubscribedResponse(PostRequest(updateUnsubscribedRequest).Result);
         }
 
-        /// <summary>
-        /// This method lets you query for rewards which match some criteria.
-        /// </summary>
+        ///// <summary>
+        ///// This method lets you query for rewards which match some criteria.
+        ///// </summary>
         public GetRewardsResponse GetRewards(GetRewardsRequest getRewardsRequest)
         {
-            return new GetRewardsResponse(GetRequest(ApiEndpoint("rewards"), getRewardsRequest).Result);
+            return new GetRewardsResponse(GetRequest(getRewardsRequest).Result);
         }
 
         /// <summary>
@@ -178,7 +135,7 @@ namespace ReferralCandyAPI
         /// </summary>
         public UpdateRewardResponse UpdateReward(UpdateRewardRequest updateRewardRequest)
         {
-            return new UpdateRewardResponse(PostRequest(ApiEndpoint("rewards"), updateRewardRequest).Result);
+            return new UpdateRewardResponse(PostRequest(updateRewardRequest).Result);
         }
     }
 }
