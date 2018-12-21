@@ -6,6 +6,7 @@
     <PackageVersion>0.1</PackageVersion>
     <Authors>ReferralCandy</Authors>
     <Description>A library that helps makes C# integration with ReferralCandy's API easier.</Description>
+    <ReleaseVersion>0.2</ReleaseVersion>
   </PropertyGroup>
 
   <ItemGroup>

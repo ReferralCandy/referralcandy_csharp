@@ -7,6 +7,7 @@
     <PackageVersion>0.1</PackageVersion>
     <Authors>ReferralCandy</Authors>
     <Description>A console application that contains sample code of how to use the ReferralCandyAPI library.</Description>
+    <ReleaseVersion>0.2</ReleaseVersion>
   </PropertyGroup>
 
   <ItemGroup>

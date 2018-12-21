@@ -22,5 +22,6 @@ Global
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		description = ReferralCandy's library for C# integration.
+		version = 0.2
 	EndGlobalSection
 EndGlobal
