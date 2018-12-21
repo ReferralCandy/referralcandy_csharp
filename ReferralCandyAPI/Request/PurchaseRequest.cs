@@ -31,6 +31,7 @@
             Parameters.Add("discount_code", "");
             Parameters.Add("accepts_marketing", "true");
             Parameters.Add("external_reference_id", "");
+            Parameters.Add("referrer_id", "");
         }
 
         /// <summary>
@@ -51,6 +52,7 @@
         /// <param name="discount_code">Discount code used in the order. Blank if no discount code was used</param>
         /// <param name="accepts_marketing">Whether the customer opted in to marketing. Defaults to true</param>
         /// <param name="external_reference_id">An ID that can be used to track this purchase externally</param>
+        /// <param name="referrer_id">The AIC parameter of the advocate who referred the friend</param>
         public PurchaseRequest(string first_name,
                                 string email,
                                 int order_timestamp,
@@ -62,7 +64,8 @@
                                 string locale = "en",
                                 string discount_code = "",
                                 bool accepts_marketing = true,
-                                string external_reference_id = "") : base("purchase")
+                                string external_reference_id = "",
+                                string referrer_id = "") : base("purchase")
         {
             Parameters.Add("first_name", first_name);
             Parameters.Add("email", email);
@@ -75,6 +78,7 @@
             Parameters.Add("discount_code", discount_code);
             Parameters.Add("accepts_marketing", accepts_marketing.ToString().ToLower());
             Parameters.Add("external_reference_id", external_reference_id);
+            Parameters.Add("referrer_id", referrer_id);
         }
     }
 }
